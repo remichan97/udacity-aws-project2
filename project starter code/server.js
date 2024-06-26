@@ -21,17 +21,17 @@ app.get("/", async (req, res) => {
 
 app.get("/filteredimage", async (req, res) => {
 
-  const url = req.params.url;
+  const url = req.query.image_url;
 
   if (!url)
     return res.status(StatusCodes.BAD_REQUEST).send("No image URLs for me to work with. Please provide a URL");
 
-  if (!validateImageUrl(req.params.url)) {
+  if (!validateImageUrl(url)) {
     res.status(StatusCodes.BAD_REQUEST).send("Provided link is not an image");
     return;
   }
 
-  filterImageFromURL(imageUrl)
+  filterImageFromURL(url)
     .then(async (image) => {
       res.status(StatusCodes.OK).sendFile(image, (ex) => {
         if (ex) {
