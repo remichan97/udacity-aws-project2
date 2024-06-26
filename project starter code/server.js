@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { filterImageFromURL, deleteLocalFiles } from "./util/util.js";
+import { filterImageFromURL, deleteLocalFiles, validateImageUrl } from "./util/util.js";
 
 // Init the Express application
 const app = express();
@@ -19,9 +19,8 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/filteredimage", async (req, res) => {
-  const pattern = /\.(jpg|jpeg|png|webp|avif|gif|svg)$/;
-  let imageUrl = req.query.image_url;
-  if (!pattern.test(imageUrl)) {
+
+  if (!validateImageUrl(req.params.url)) {
     res.status(400).send("Provided link is not an image");
     return;
   }

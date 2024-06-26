@@ -46,3 +46,9 @@ export async function deleteLocalFiles(files) {
       console.log("Successfully delete file");
   });
 }
+
+export function validateImageUrl(imageUrl) {
+  const pattern = /\.(jpg|jpeg|png|webp|avif|gif|svg)$/;
+  return pattern.test(imageUrl);
+}
+
