@@ -19,6 +19,7 @@ To complete this project, you will need to:
 
 Successful URL responses should have a 200 code. Ensure that you include error codes for the scenario that someone uploads something other than an image and for other common errors.
 
+Project endpoint: http://mirai-project2-dev.us-east-1.elasticbeanstalk.com/
 ## License
 
 [License](LICENSE.txt)
