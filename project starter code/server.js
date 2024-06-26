@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles, validateImageUrl } from "./util/util.js";
+import { StatusCodes } from "http-status-codes";
 
 // Init the Express application
 const app = express();
@@ -20,17 +21,22 @@ app.get("/", async (req, res) => {
 
 app.get("/filteredimage", async (req, res) => {
 
+  const url = req.params.url;
+
+  if (!url)
+    return res.status(StatusCodes.BAD_REQUEST).send("No image URLs for me to work with. Please provide a URL");
+
   if (!validateImageUrl(req.params.url)) {
-    res.status(400).send("Provided link is not an image");
+    res.status(StatusCodes.BAD_REQUEST).send("Provided link is not an image");
     return;
   }
 
   filterImageFromURL(imageUrl)
     .then(async (image) => {
-      res.status(200).sendFile(image, (ex) => {
+      res.status(StatusCodes.OK).sendFile(image, (ex) => {
         if (ex) {
           console.log(ex);
-          res.status(403).send(ex);
+          res.status(StatusCodes.FORBIDDEN).send(ex);
         }
         else {
           deleteLocalFiles(image);
@@ -38,7 +44,7 @@ app.get("/filteredimage", async (req, res) => {
       });
     })
     .catch((ex) => {
-      res.status(422).send(ex);
+      res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(ex);
     });
   return;
 });
